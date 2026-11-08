@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Rajdhani:wght@500;700&family=Sedgwick+Ave+Display&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -24,6 +24,106 @@
             background-color: #030303;
             color: white;
             font-family: 'Rajdhani', sans-serif;
+        }
+
+        #intro-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100dvw;
+            height: 100dvh;
+            z-index: 100;
+            background-color: #000;
+            cursor: pointer;
+            overflow: hidden;
+            transition: opacity 1.5s ease;
+        }
+
+        .sky-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, #0a1118 0%, #1a2a3a 50%, #2a3b4c 100%);
+            z-index: 1;
+        }
+
+        .mountain-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('https://files.catbox.moe/9xpjl0.jpg');
+            background-size: cover;
+            background-position: center bottom;
+            z-index: 2;
+            transition: transform 3s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        .fog-layer {
+            position: absolute;
+            bottom: 0;
+            left: -50%;
+            width: 200%;
+            height: 50%;
+            background: url('https://www.transparenttextures.com/patterns/stardust.png');
+            opacity: 0.15;
+            z-index: 3;
+            animation: fogDrift 25s linear infinite;
+            pointer-events: none;
+        }
+
+        @keyframes fogDrift {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(25%); }
+        }
+
+        .intro-text-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+            transition: transform 2.5s cubic-bezier(0.4, 0, 0.2, 1), opacity 1s ease;
+        }
+
+        .intro-text {
+            font-family: 'Sedgwick Ave Display', cursive;
+            font-size: 45px;
+            color: #111;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            -webkit-text-stroke: 1.5px #fff;
+            text-shadow: 4px 4px 0px #8b0000, 6px 6px 0px #000;
+            transform: rotate(-3deg);
+            animation: textPulse 2s infinite alternate;
+            pointer-events: none;
+        }
+
+        @keyframes textPulse {
+            0% { transform: rotate(-3deg) scale(1); opacity: 0.8; }
+            100% { transform: rotate(-2deg) scale(1.05); opacity: 1; }
+        }
+
+        .pan-up .mountain-bg {
+            transform: translateY(-100%);
+        }
+
+        .pan-up .fog-layer {
+            transform: translateY(-100%);
+            opacity: 0;
+            transition: transform 2.5s ease, opacity 2s ease;
+        }
+
+        .pan-up .intro-text-container {
+            transform: translateY(-100dvh);
+            opacity: 0;
         }
 
         #bg-image {
@@ -65,85 +165,6 @@
             transition: opacity 2s ease;
         }
 
-        #intro-screen {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100dvw;
-            height: 100dvh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 100;
-            background-color: #000;
-            background-size: cover;
-            background-position: center;
-            cursor: pointer;
-            transition: opacity 1.2s cubic-bezier(0.4, 0, 0.2, 1);
-            overflow: hidden;
-        }
-
-        #intro-screen::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: radial-gradient(circle, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.8) 100%);
-            z-index: 100;
-        }
-
-        .intro-text-container {
-            position: relative;
-            z-index: 101;
-            padding: 20px;
-        }
-
-        .intro-text {
-            font-family: 'Cinzel', serif;
-            font-size: 28px;
-            font-weight: 900;
-            letter-spacing: 15px;
-            text-transform: uppercase;
-            background: linear-gradient(90deg, #4dfbf2, #1c78db, #7d26cd, #4dfbf2);
-            background-size: 300% 100%;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            animation: paintSweep 4s linear infinite;
-            filter: drop-shadow(0 0 12px rgba(77, 251, 242, 0.6)) drop-shadow(0 0 25px rgba(28, 120, 219, 0.3));
-            pointer-events: none;
-        }
-
-        @keyframes paintSweep {
-            0% { background-position: 100% 50%; }
-            100% { background-position: -100% 50%; }
-        }
-
-        .light-sweep {
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 50%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(200, 255, 255, 0.8), transparent);
-            transform: skewX(-25deg);
-            z-index: 102;
-            pointer-events: none;
-            opacity: 0;
-            filter: blur(8px);
-        }
-
-        .light-sweep.flash {
-            animation: sweepAcross 1s cubic-bezier(0.1, 0.9, 0.2, 1) forwards;
-        }
-
-        @keyframes sweepAcross {
-            0% { left: -100%; opacity: 0; }
-            30% { opacity: 1; }
-            100% { left: 200%; opacity: 0; }
-        }
-
         .container {
             display: flex;
             flex-direction: column;
@@ -171,14 +192,14 @@
             margin-bottom: 20px;
             padding: 3px;
             border-radius: 50%;
-            background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(0, 150, 255, 0.2), rgba(255,255,255,0.1));
-            box-shadow: 0 0 25px rgba(0, 0, 0, 0.9), inset 0 0 10px rgba(0, 255, 255, 0.1);
+            background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(139,0,0,0.6), rgba(255,255,255,0.1));
+            box-shadow: 0 0 25px rgba(0, 0, 0, 0.9), inset 0 0 10px rgba(255, 0, 0, 0.1);
             animation: ringPulse 4s infinite alternate;
         }
 
         @keyframes ringPulse {
-            0% { box-shadow: 0 0 25px rgba(0, 0, 0, 0.9), inset 0 0 10px rgba(0, 255, 255, 0.1); }
-            100% { box-shadow: 0 0 35px rgba(0, 100, 150, 0.3), inset 0 0 15px rgba(0, 255, 255, 0.3); }
+            0% { box-shadow: 0 0 25px rgba(0, 0, 0, 0.9), inset 0 0 10px rgba(255, 0, 0, 0.1); }
+            100% { box-shadow: 0 0 35px rgba(100, 0, 0, 0.3), inset 0 0 15px rgba(255, 0, 0, 0.3); }
         }
 
         .profile-pic {
@@ -237,7 +258,7 @@
             left: 0;
             width: 100%;
             height: 1px;
-            background: linear-gradient(90deg, transparent, rgba(0, 255, 255, 0.5), transparent);
+            background: linear-gradient(90deg, transparent, rgba(255, 50, 50, 0.5), transparent);
             transform: scaleX(0);
             transition: transform 0.4s ease;
         }
@@ -249,7 +270,7 @@
         .discord-badge:hover {
             background: rgba(25, 25, 25, 0.8);
             border-color: rgba(255, 255, 255, 0.15);
-            box-shadow: 0 0 20px rgba(0, 255, 255, 0.15);
+            box-shadow: 0 0 20px rgba(255, 0, 0, 0.15);
         }
 
         .discord-badge i {
@@ -287,7 +308,7 @@
 
         .social-link:hover {
             color: #fff;
-            text-shadow: 0 0 15px rgba(255, 255, 255, 0.9), 0 0 25px rgba(0, 255, 255, 0.4);
+            text-shadow: 0 0 15px rgba(255, 255, 255, 0.9), 0 0 25px rgba(255, 0, 0, 0.4);
             transform: translateY(-5px) scale(1.1);
         }
         
@@ -388,7 +409,7 @@
             .profile-pic { width: 90px; height: 90px; }
             .social-link { font-size: 22px; }
             .social-link img { width: 22px; height: 22px; }
-            .intro-text { font-size: 18px; letter-spacing: 8px; }
+            .intro-text { font-size: 32px; }
             .top-ui { top: 15px; left: 15px; }
             .view-counter { bottom: 15px; left: 15px; }
             .discord-badge { padding: 6px 14px; font-size: 12px; }
@@ -398,7 +419,9 @@
 <body>
 
     <div id="intro-screen">
-        <div class="light-sweep" id="light-sweep"></div>
+        <div class="sky-bg"></div>
+        <div class="mountain-bg"></div>
+        <div class="fog-layer"></div>
         <div class="intro-text-container">
             <div class="intro-text">Take me there</div>
         </div>
@@ -444,7 +467,7 @@
             discord: "vxmpscarlet",
             profilePic: "https://files.catbox.moe/8l9rww.jpg",
             backgroundImage: "https://files.catbox.moe/9xpjl0.jpg",
-            introBackgroundImage: "https://files.catbox.moe/9xpjl0.jpg", // Replace with the direct URL of your uploaded intro image
+            introBackgroundImage: "https://files.catbox.moe/9xpjl0.jpg",
             audioFile: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
             links: [
                 { icon: "fa-instagram", url: "https://instagram.com" },
@@ -459,12 +482,12 @@
         const bgOverlay = document.getElementById('bg-overlay');
         const canvas = document.getElementById('particle-canvas');
         const introScreen = document.getElementById('intro-screen');
-        const lightSweep = document.getElementById('light-sweep');
+        const mountainBg = document.querySelector('.mountain-bg');
         const audio = document.getElementById('bg-audio');
         const audioIcon = document.getElementById('audio-icon');
         const volumeSlider = document.getElementById('volume-slider');
 
-        introScreen.style.backgroundImage = `url('${CONFIG.introBackgroundImage}')`;
+        mountainBg.style.backgroundImage = `url('${CONFIG.introBackgroundImage}')`;
         bgImg.style.backgroundImage = `url('${CONFIG.backgroundImage}')`;
         document.getElementById('profile-pic').src = CONFIG.profilePic;
         document.getElementById('name').innerText = CONFIG.name;
@@ -538,12 +561,11 @@
         });
 
         introScreen.addEventListener('click', () => {
-            lightSweep.classList.add('flash');
+            introScreen.classList.add('pan-up');
             
             setTimeout(() => {
                 introScreen.style.opacity = 0;
-                document.querySelector('.intro-text').style.opacity = 0;
-            }, 300);
+            }, 2500);
 
             setTimeout(() => {
                 bgImg.style.opacity = 1;
@@ -558,7 +580,7 @@
                         updateAudioIcon();
                     }).catch(() => {});
                 }
-            }, 800);
+            }, 3500);
         });
 
         const ctx = canvas.getContext('2d');
@@ -585,7 +607,7 @@
                 this.speedX = Math.random() * 1 - 0.5;
                 this.opacity = Math.random() * 0.7 + 0.1;
                 this.flicker = Math.random() * 0.03 + 0.01;
-                this.color = Math.random() > 0.6 ? '100, 255, 255' : '255, 255, 255';
+                this.color = Math.random() > 0.6 ? '200, 0, 0' : '255, 255, 255';
             }
             update() {
                 this.y += this.speedY;
