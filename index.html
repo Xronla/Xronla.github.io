@@ -34,8 +34,8 @@
             height: 100dvh;
             background-size: cover;
             background-position: center;
-            filter: grayscale(100%) brightness(0.4) contrast(1.2);
-            z-index: -3;
+            filter: grayscale(100%) brightness(0.6) contrast(1.2);
+            z-index: -2;
             opacity: 0;
             transition: opacity 2s ease;
         }
@@ -46,10 +46,12 @@
             left: 0;
             width: 100dvw;
             height: 100dvh;
-            background: radial-gradient(circle at center, transparent 0%, rgba(0,0,0,0.8) 100%);
-            z-index: -2;
+            background: rgba(0, 0, 0, 0.5);
+            box-shadow: inset 0 0 150px rgba(0, 0, 0, 0.9);
+            z-index: -1;
             opacity: 0;
             transition: opacity 2s ease;
+            pointer-events: none;
         }
 
         #particle-canvas {
@@ -58,7 +60,7 @@
             left: 0;
             width: 100dvw;
             height: 100dvh;
-            z-index: -1;
+            z-index: 0;
             pointer-events: none;
             opacity: 0;
             transition: opacity 2s ease;
@@ -76,51 +78,46 @@
             z-index: 100;
             background: #000;
             cursor: pointer;
-            overflow: hidden;
+            transition: opacity 1.5s ease;
         }
 
         .intro-text {
             font-family: 'Cinzel', serif;
-            font-size: 24px;
-            letter-spacing: 10px;
-            color: rgba(255, 255, 255, 0.7);
+            font-size: 22px;
+            letter-spacing: 8px;
+            color: rgba(255, 255, 255, 0.8);
             text-transform: uppercase;
-            animation: pulse 2s infinite alternate;
             z-index: 101;
             pointer-events: none;
+            animation: inferno 3s infinite alternate;
         }
 
-        @keyframes pulse {
-            0% { opacity: 0.3; letter-spacing: 8px; text-shadow: 0 0 5px rgba(255,255,255,0); }
-            100% { opacity: 1; letter-spacing: 12px; text-shadow: 0 0 20px rgba(255,255,255,0.8), 0 0 10px rgba(255,0,0,0.5); }
+        @keyframes inferno {
+            0% { text-shadow: 0 0 10px rgba(255, 0, 0, 0.4), 0 0 20px rgba(255, 69, 0, 0.2); }
+            100% { text-shadow: 0 0 15px rgba(255, 0, 0, 0.8), 0 0 30px rgba(255, 69, 0, 0.6), 0 0 45px rgba(255, 140, 0, 0.4); }
         }
 
-        .shard {
+        .flare {
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(10, 10, 10, 0.95);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            transition: transform 1.2s cubic-bezier(0.25, 1, 0.5, 1), opacity 1.2s ease;
+            top: 50%;
+            left: 50%;
+            width: 10px;
+            height: 10px;
+            background: radial-gradient(circle, rgba(255, 30, 0, 1) 0%, rgba(255, 0, 0, 0.8) 30%, transparent 70%);
+            border-radius: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            opacity: 0;
             pointer-events: none;
+            z-index: 102;
         }
 
-        .shatter .shard {
-            opacity: 0;
+        .flare.expand {
+            animation: burn 1.5s cubic-bezier(0.1, 0.9, 0.2, 1) forwards;
         }
 
-        .shatter .shard:nth-child(1) { transform: translate(-50dvw, -50dvh) rotate(-20deg) scale(0.5); }
-        .shatter .shard:nth-child(2) { transform: translate(50dvw, -30dvh) rotate(15deg) scale(0.5); }
-        .shatter .shard:nth-child(3) { transform: translate(-30dvw, 50dvh) rotate(-10deg) scale(0.5); }
-        .shatter .shard:nth-child(4) { transform: translate(40dvw, 50dvh) rotate(25deg) scale(0.5); }
-        .shatter .shard:nth-child(5) { transform: translate(0dvw, -60dvh) rotate(5deg) scale(0.5); }
-        .shatter .shard:nth-child(6) { transform: translate(0dvw, 60dvh) rotate(-15deg) scale(0.5); }
-        
-        .shatter .intro-text {
-            opacity: 0;
-            transition: opacity 0.5s;
+        @keyframes burn {
+            0% { transform: translate(-50%, -50%) scale(0); opacity: 1; }
+            100% { transform: translate(-50%, -50%) scale(300); opacity: 0; }
         }
 
         .container {
@@ -134,7 +131,7 @@
             text-align: center;
             z-index: 1;
             opacity: 0;
-            transform: scale(0.9);
+            transform: scale(0.98);
             transition: opacity 2s ease, transform 2s cubic-bezier(0.19, 1, 0.22, 1);
             pointer-events: none;
         }
@@ -150,13 +147,13 @@
             margin-bottom: 20px;
             padding: 4px;
             border-radius: 50%;
-            background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(139,0,0,0.5));
-            box-shadow: 0 0 30px rgba(0, 0, 0, 0.8), 0 0 15px rgba(255, 0, 0, 0.1);
+            background: linear-gradient(135deg, rgba(255,255,255,0.05), rgba(139,0,0,0.3));
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.8);
             transition: box-shadow 0.4s ease;
         }
 
         .profile-pic-container:hover {
-            box-shadow: 0 0 30px rgba(0, 0, 0, 0.8), 0 0 25px rgba(255, 0, 0, 0.4);
+            box-shadow: 0 0 40px rgba(255, 0, 0, 0.2);
         }
 
         .profile-pic {
@@ -237,101 +234,143 @@
 
         .social-links {
             display: flex;
-            gap: 15px;
+            gap: 20px;
             flex-wrap: wrap;
             justify-content: center;
+            margin-top: 10px;
         }
 
         .social-link {
             display: flex;
             align-items: center;
             justify-content: center;
-            width: 50px;
-            height: 50px;
-            background: rgba(15, 15, 15, 0.6);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            color: white;
+            color: rgba(255, 255, 255, 0.7);
             text-decoration: none;
-            font-size: 22px;
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            position: relative;
-            overflow: hidden;
-            clip-path: polygon(10% 0, 100% 0, 100% 90%, 90% 100%, 0 100%, 0 10%);
+            font-size: 26px;
+            transition: all 0.3s ease;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.8));
         }
 
         .social-link img {
-            width: 60%;
-            height: 60%;
+            width: 26px;
+            height: 26px;
             object-fit: contain;
-            filter: drop-shadow(0 0 5px rgba(255,255,255,0.5));
             transition: transform 0.3s ease;
         }
 
         .social-link:hover {
-            background: rgba(255, 255, 255, 0.95);
-            color: black;
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.6), 0 0 15px rgba(255, 255, 255, 0.4);
-            border-color: transparent;
+            color: white;
+            text-shadow: 0 0 15px rgba(255, 255, 255, 0.8);
+            transform: translateY(-4px);
         }
         
         .social-link:hover img {
-            filter: drop-shadow(0 0 2px rgba(0,0,0,0.8)) invert(1);
+            transform: scale(1.1);
+            filter: drop-shadow(0 0 10px rgba(255,255,255,0.8));
         }
 
-        .social-link:hover i {
-            color: black;
-        }
-
-        .audio-btn {
+        .top-ui {
             position: absolute;
             top: 25px;
             left: 25px;
-            background: rgba(15, 15, 15, 0.6);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            color: white;
-            width: 45px;
-            height: 45px;
             display: flex;
             align-items: center;
-            justify-content: center;
-            cursor: pointer;
+            gap: 15px;
+            background: rgba(15, 15, 15, 0.6);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 10px 15px;
+            border-radius: 8px;
             z-index: 10;
-            transition: all 0.3s ease;
-            clip-path: polygon(0 0, 100% 0, 100% 70%, 70% 100%, 0 100%);
         }
 
-        .audio-btn:hover {
-            background: rgba(255, 255, 255, 0.2);
-            box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
+        .audio-control {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .audio-control i {
+            width: 20px;
+            text-align: center;
+        }
+
+        input[type=range] {
+            -webkit-appearance: none;
+            width: 70px;
+            background: transparent;
+            outline: none;
+        }
+
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            height: 10px;
+            width: 10px;
+            border-radius: 50%;
+            background: #fff;
+            cursor: pointer;
+            margin-top: -3px;
+            box-shadow: 0 0 10px rgba(255,255,255,0.5);
+        }
+
+        input[type=range]::-webkit-slider-runnable-track {
+            width: 100%;
+            height: 4px;
+            cursor: pointer;
+            background: rgba(255,255,255,0.2);
+            border-radius: 2px;
+        }
+
+        .view-counter {
+            position: absolute;
+            bottom: 25px;
+            left: 25px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            font-weight: 700;
+            color: rgba(255, 255, 255, 0.5);
+            z-index: 10;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.8);
+        }
+
+        .view-counter i {
+            font-size: 16px;
         }
 
         @media (max-width: 600px) {
             .name { font-size: 28px; }
             .tagline { font-size: 13px; }
             .profile-pic { width: 90px; height: 90px; }
-            .social-link { width: 45px; height: 45px; font-size: 18px; }
-            .intro-text { font-size: 18px; letter-spacing: 6px; }
+            .social-link { font-size: 24px; }
+            .intro-text { font-size: 16px; letter-spacing: 6px; }
+            .top-ui { top: 15px; left: 15px; padding: 8px 12px; }
+            .view-counter { bottom: 15px; left: 15px; }
         }
     </style>
 </head>
 <body>
 
     <div id="intro-screen">
-        <div class="intro-text">Click to Break</div>
-        <div class="shard" style="clip-path: polygon(0 0, 50% 0, 60% 40%, 30% 100%, 0 100%);"></div>
-        <div class="shard" style="clip-path: polygon(50% 0, 100% 0, 100% 50%, 60% 40%);"></div>
-        <div class="shard" style="clip-path: polygon(100% 50%, 100% 100%, 40% 100%, 60% 40%);"></div>
-        <div class="shard" style="clip-path: polygon(0 100%, 40% 100%, 30% 80%, 15% 50%);"></div>
-        <div class="shard" style="clip-path: polygon(15% 50%, 30% 80%, 40% 100%, 60% 40%, 30% 0);"></div>
-        <div class="shard" style="clip-path: polygon(60% 40%, 100% 100%, 60% 100%, 40% 100%);"></div>
+        <div class="flare" id="flare"></div>
+        <div class="intro-text">Click to enter...</div>
     </div>
 
-    <div class="audio-btn" id="audio-toggle" title="Toggle Audio">
-        <i class="fas fa-volume-mute" id="audio-icon"></i>
+    <div class="top-ui">
+        <div class="audio-control" id="audio-toggle">
+            <i class="fas fa-volume-up" id="audio-icon"></i>
+            <input type="range" id="volume-slider" min="0" max="1" step="0.01" value="0.5">
+        </div>
+    </div>
+
+    <div class="view-counter">
+        <i class="fas fa-eye"></i>
+        <span id="view-count">0</span>
     </div>
 
     <div id="bg-image"></div>
@@ -367,22 +406,31 @@
                 { icon: "fa-instagram", url: "https://instagram.com" },
                 { icon: "fa-spotify", url: "https://spotify.com" },
                 { img: "https://cdn-icons-png.flaticon.com/512/2504/2504914.png", url: "https://custom-link.com" },
-                { icon: "fa-steam", url: "https://steamcommunity.com" }
+                { icon: "fa-discord", url: "https://discord.com" }
             ]
         };
 
         document.title = CONFIG.name;
         const bgImg = document.getElementById('bg-image');
         const bgOverlay = document.getElementById('bg-overlay');
-        const mainContainer = document.getElementById('main-container');
         const canvas = document.getElementById('particle-canvas');
         const introScreen = document.getElementById('intro-screen');
+        const flare = document.getElementById('flare');
+        const mainContainer = document.getElementById('main-container');
+        const audio = document.getElementById('bg-audio');
+        const audioIcon = document.getElementById('audio-icon');
+        const volumeSlider = document.getElementById('volume-slider');
 
         bgImg.style.backgroundImage = `url('${CONFIG.backgroundImage}')`;
         document.getElementById('profile-pic').src = CONFIG.profilePic;
         document.getElementById('name').innerText = CONFIG.name;
         document.getElementById('tagline').innerText = CONFIG.tagline;
         document.getElementById('discord-name').innerText = CONFIG.discord;
+
+        let views = localStorage.getItem('page_views') || 42;
+        views++;
+        localStorage.setItem('page_views', views);
+        document.getElementById('view-count').innerText = views;
 
         document.getElementById('discord-badge').addEventListener('click', () => {
             navigator.clipboard.writeText(CONFIG.discord);
@@ -408,49 +456,66 @@
             socialContainer.appendChild(a);
         });
 
-        const audio = document.getElementById('bg-audio');
         audio.src = CONFIG.audioFile;
-        const audioBtn = document.getElementById('audio-toggle');
-        const audioIcon = document.getElementById('audio-icon');
+        audio.volume = 0.5;
         let isPlaying = false;
 
-        audioBtn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            if (isPlaying) {
-                audio.pause();
+        function updateAudioIcon() {
+            if (audio.volume === 0) {
                 audioIcon.className = 'fas fa-volume-mute';
+            } else if (audio.volume < 0.5) {
+                audioIcon.className = 'fas fa-volume-down';
             } else {
-                audio.play();
                 audioIcon.className = 'fas fa-volume-up';
             }
-            isPlaying = !isPlaying;
+        }
+
+        volumeSlider.addEventListener('input', (e) => {
+            audio.volume = e.target.value;
+            updateAudioIcon();
+            if (audio.volume > 0 && !isPlaying) {
+                audio.play();
+                isPlaying = true;
+            }
+        });
+
+        document.getElementById('audio-toggle').addEventListener('click', (e) => {
+            if (e.target.tagName !== 'INPUT') {
+                if (isPlaying) {
+                    audio.pause();
+                    isPlaying = false;
+                    audioIcon.className = 'fas fa-volume-mute';
+                } else {
+                    audio.play();
+                    isPlaying = true;
+                    updateAudioIcon();
+                }
+            }
         });
 
         introScreen.addEventListener('click', () => {
-            introScreen.classList.add('shatter');
+            flare.classList.add('expand');
+            introScreen.style.opacity = 0;
             
             setTimeout(() => {
                 bgImg.style.opacity = 1;
                 bgOverlay.style.opacity = 1;
                 canvas.style.opacity = 1;
                 document.body.classList.add('reveal');
+                introScreen.style.display = 'none';
                 
-                if (!isPlaying && CONFIG.audioFile) {
+                if (CONFIG.audioFile) {
                     audio.play().then(() => {
-                        audioIcon.className = 'fas fa-volume-up';
                         isPlaying = true;
+                        updateAudioIcon();
                     }).catch(() => {});
                 }
-            }, 400);
-
-            setTimeout(() => {
-                introScreen.style.display = 'none';
-            }, 1600);
+            }, 600);
         });
 
         const ctx = canvas.getContext('2d');
         let particlesArray = [];
-        const particleCount = 80;
+        const particleCount = 60;
 
         function setCanvasSize() {
             canvas.width = window.innerWidth;
@@ -463,11 +528,11 @@
             constructor() {
                 this.x = Math.random() * canvas.width;
                 this.y = Math.random() * canvas.height;
-                this.size = Math.random() * 2.5 + 0.5;
-                this.speedX = Math.random() * 1.5 - 0.75;
-                this.speedY = Math.random() * -1.5 - 0.5;
-                this.opacity = Math.random() * 0.6 + 0.1;
-                this.color = Math.random() > 0.8 ? '255, 50, 50' : '255, 255, 255';
+                this.size = Math.random() * 2 + 0.5;
+                this.speedX = Math.random() * 1 - 0.5;
+                this.speedY = Math.random() * -1 - 0.2;
+                this.opacity = Math.random() * 0.5 + 0.1;
+                this.color = Math.random() > 0.85 ? '255, 40, 40' : '255, 255, 255';
             }
             update() {
                 this.x += this.speedX;
@@ -475,9 +540,6 @@
                 if (this.y < 0) {
                     this.y = canvas.height;
                     this.x = Math.random() * canvas.width;
-                }
-                if (this.x > canvas.width || this.x < 0) {
-                    this.speedX *= -1;
                 }
             }
             draw() {
