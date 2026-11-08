@@ -21,7 +21,7 @@
             height: 100dvh;
             width: 100dvw;
             overflow: hidden;
-            background-color: #050505;
+            background-color: #030303;
             color: white;
             font-family: 'Rajdhani', sans-serif;
         }
@@ -34,10 +34,10 @@
             height: 100dvh;
             background-size: cover;
             background-position: center;
-            filter: grayscale(100%) brightness(0.6) contrast(1.2);
-            z-index: -2;
+            filter: grayscale(100%) brightness(0.5) contrast(1.2);
+            z-index: -3;
             opacity: 0;
-            transition: opacity 2s ease;
+            transition: opacity 2.5s ease;
         }
 
         #bg-overlay {
@@ -46,11 +46,10 @@
             left: 0;
             width: 100dvw;
             height: 100dvh;
-            background: rgba(0, 0, 0, 0.5);
-            box-shadow: inset 0 0 150px rgba(0, 0, 0, 0.9);
-            z-index: -1;
+            background: radial-gradient(circle at center, transparent 10%, rgba(10, 0, 0, 0.8) 70%, #000 100%);
+            z-index: -2;
             opacity: 0;
-            transition: opacity 2s ease;
+            transition: opacity 2.5s ease;
             pointer-events: none;
         }
 
@@ -60,7 +59,7 @@
             left: 0;
             width: 100dvw;
             height: 100dvh;
-            z-index: 0;
+            z-index: -1;
             pointer-events: none;
             opacity: 0;
             transition: opacity 2s ease;
@@ -78,23 +77,24 @@
             z-index: 100;
             background: #000;
             cursor: pointer;
-            transition: opacity 1.5s ease;
+            transition: opacity 1s ease;
         }
 
         .intro-text {
             font-family: 'Cinzel', serif;
-            font-size: 22px;
-            letter-spacing: 8px;
-            color: rgba(255, 255, 255, 0.8);
+            font-size: 20px;
+            letter-spacing: 12px;
+            color: rgba(255, 255, 255, 0.9);
             text-transform: uppercase;
             z-index: 101;
             pointer-events: none;
-            animation: inferno 3s infinite alternate;
+            animation: burnPulse 3s infinite alternate;
         }
 
-        @keyframes inferno {
-            0% { text-shadow: 0 0 10px rgba(255, 0, 0, 0.4), 0 0 20px rgba(255, 69, 0, 0.2); }
-            100% { text-shadow: 0 0 15px rgba(255, 0, 0, 0.8), 0 0 30px rgba(255, 69, 0, 0.6), 0 0 45px rgba(255, 140, 0, 0.4); }
+        @keyframes burnPulse {
+            0% { text-shadow: 0 0 8px rgba(200, 0, 0, 0.4), 0 0 15px rgba(255, 69, 0, 0.1); opacity: 0.7; }
+            50% { text-shadow: 0 0 12px rgba(255, 0, 0, 0.6), 0 0 25px rgba(255, 69, 0, 0.3); opacity: 1; }
+            100% { text-shadow: 0 0 20px rgba(255, 0, 0, 0.9), 0 0 40px rgba(255, 140, 0, 0.5), 0 0 60px rgba(200, 0, 0, 0.4); opacity: 1; }
         }
 
         .flare {
@@ -103,21 +103,22 @@
             left: 50%;
             width: 10px;
             height: 10px;
-            background: radial-gradient(circle, rgba(255, 30, 0, 1) 0%, rgba(255, 0, 0, 0.8) 30%, transparent 70%);
+            background: radial-gradient(circle, rgba(255, 20, 0, 1) 0%, rgba(139, 0, 0, 0.8) 40%, transparent 80%);
             border-radius: 50%;
             transform: translate(-50%, -50%) scale(0);
             opacity: 0;
             pointer-events: none;
-            z-index: 102;
+            z-index: 99;
         }
 
         .flare.expand {
-            animation: burn 1.5s cubic-bezier(0.1, 0.9, 0.2, 1) forwards;
+            animation: cinematics 1.5s cubic-bezier(0.15, 0.85, 0.3, 1) forwards;
         }
 
-        @keyframes burn {
-            0% { transform: translate(-50%, -50%) scale(0); opacity: 1; }
-            100% { transform: translate(-50%, -50%) scale(300); opacity: 0; }
+        @keyframes cinematics {
+            0% { transform: translate(-50%, -50%) scale(0); opacity: 1; filter: blur(0px); }
+            50% { transform: translate(-50%, -50%) scale(200); opacity: 0.8; filter: blur(10px); }
+            100% { transform: translate(-50%, -50%) scale(400); opacity: 0; filter: blur(40px); }
         }
 
         .container {
@@ -131,29 +132,30 @@
             text-align: center;
             z-index: 1;
             opacity: 0;
-            transform: scale(0.98);
+            transform: translateY(15px);
             transition: opacity 2s ease, transform 2s cubic-bezier(0.19, 1, 0.22, 1);
             pointer-events: none;
         }
 
         .reveal .container {
             opacity: 1;
-            transform: scale(1);
+            transform: translateY(0);
             pointer-events: auto;
         }
 
         .profile-pic-container {
             position: relative;
             margin-bottom: 20px;
-            padding: 4px;
+            padding: 3px;
             border-radius: 50%;
-            background: linear-gradient(135deg, rgba(255,255,255,0.05), rgba(139,0,0,0.3));
-            box-shadow: 0 0 30px rgba(0, 0, 0, 0.8);
-            transition: box-shadow 0.4s ease;
+            background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(139,0,0,0.6), rgba(255,255,255,0.1));
+            box-shadow: 0 0 25px rgba(0, 0, 0, 0.9), inset 0 0 10px rgba(255, 0, 0, 0.2);
+            animation: ringPulse 4s infinite alternate;
         }
 
-        .profile-pic-container:hover {
-            box-shadow: 0 0 40px rgba(255, 0, 0, 0.2);
+        @keyframes ringPulse {
+            0% { box-shadow: 0 0 25px rgba(0, 0, 0, 0.9), inset 0 0 10px rgba(255, 0, 0, 0.1); }
+            100% { box-shadow: 0 0 35px rgba(100, 0, 0, 0.4), inset 0 0 15px rgba(255, 0, 0, 0.4); }
         }
 
         .profile-pic {
@@ -162,25 +164,25 @@
             border-radius: 50%;
             object-fit: cover;
             display: block;
-            border: 2px solid rgba(255, 255, 255, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.4);
         }
 
         .name {
             font-family: 'Cinzel', serif;
-            font-size: 36px;
+            font-size: 34px;
             font-weight: 700;
-            letter-spacing: 2px;
-            text-shadow: 0 2px 10px rgba(0, 0, 0, 1), 0 0 20px rgba(255, 255, 255, 0.2);
-            margin-bottom: 5px;
-            color: #f0f0f0;
+            letter-spacing: 3px;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 1), 0 0 15px rgba(255, 255, 255, 0.1);
+            margin-bottom: 6px;
+            color: #e5e5e5;
         }
 
         .tagline {
-            font-size: 15px;
+            font-size: 14px;
             font-weight: 500;
-            color: #aaaaaa;
+            color: #999;
             margin-bottom: 25px;
-            letter-spacing: 1px;
+            letter-spacing: 1.5px;
             text-shadow: 0 1px 3px rgba(0, 0, 0, 1);
         }
 
@@ -188,141 +190,154 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            background: rgba(15, 15, 15, 0.6);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            padding: 10px 20px;
-            border-radius: 5px;
-            font-size: 14px;
+            background: rgba(12, 12, 12, 0.5);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 8px 18px;
+            border-radius: 4px;
+            font-size: 13px;
             font-weight: 700;
             letter-spacing: 1px;
             margin-bottom: 30px;
             cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+            transition: all 0.4s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.6);
             position: relative;
             overflow: hidden;
         }
 
-        .discord-badge::before {
+        .discord-badge::after {
             content: '';
             position: absolute;
-            top: 0;
-            left: -100%;
+            bottom: 0;
+            left: 0;
             width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
-            transition: left 0.5s ease;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255, 50, 50, 0.5), transparent);
+            transform: scaleX(0);
+            transition: transform 0.4s ease;
         }
 
-        .discord-badge:hover::before {
-            left: 100%;
+        .discord-badge:hover::after {
+            transform: scaleX(1);
         }
 
         .discord-badge:hover {
-            background: rgba(30, 30, 30, 0.8);
-            border-color: rgba(255, 255, 255, 0.3);
-            box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+            background: rgba(25, 25, 25, 0.8);
+            border-color: rgba(255, 255, 255, 0.15);
+            box-shadow: 0 0 20px rgba(255, 0, 0, 0.15);
         }
 
         .discord-badge i {
-            margin-right: 10px;
+            margin-right: 8px;
             color: #5865F2;
-            font-size: 18px;
+            font-size: 16px;
         }
 
         .social-links {
             display: flex;
-            gap: 20px;
+            gap: 22px;
             flex-wrap: wrap;
             justify-content: center;
-            margin-top: 10px;
+            align-items: center;
+            margin-top: 5px;
         }
 
         .social-link {
             display: flex;
             align-items: center;
             justify-content: center;
-            color: rgba(255, 255, 255, 0.7);
+            color: rgba(255, 255, 255, 0.6);
             text-decoration: none;
-            font-size: 26px;
-            transition: all 0.3s ease;
+            font-size: 24px;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             filter: drop-shadow(0 2px 4px rgba(0,0,0,0.8));
         }
 
         .social-link img {
-            width: 26px;
-            height: 26px;
+            width: 24px;
+            height: 24px;
             object-fit: contain;
-            transition: transform 0.3s ease;
+            transition: transform 0.4s ease, filter 0.4s ease;
         }
 
         .social-link:hover {
-            color: white;
-            text-shadow: 0 0 15px rgba(255, 255, 255, 0.8);
-            transform: translateY(-4px);
+            color: #fff;
+            text-shadow: 0 0 15px rgba(255, 255, 255, 0.9), 0 0 25px rgba(255, 0, 0, 0.4);
+            transform: translateY(-5px) scale(1.1);
         }
         
         .social-link:hover img {
-            transform: scale(1.1);
-            filter: drop-shadow(0 0 10px rgba(255,255,255,0.8));
+            filter: drop-shadow(0 0 10px rgba(255,255,255,0.9)) brightness(1.2);
         }
 
         .top-ui {
             position: absolute;
-            top: 25px;
-            left: 25px;
+            top: 20px;
+            left: 20px;
             display: flex;
             align-items: center;
-            gap: 15px;
-            background: rgba(15, 15, 15, 0.6);
+            gap: 12px;
+            background: rgba(10, 10, 10, 0.4);
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 10px 15px;
-            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 8px 14px;
+            border-radius: 6px;
             z-index: 10;
+            transition: opacity 0.3s;
         }
 
         .audio-control {
             display: flex;
             align-items: center;
             gap: 10px;
-            color: white;
-            font-size: 16px;
+            color: rgba(255,255,255,0.8);
+            font-size: 14px;
             cursor: pointer;
         }
 
         .audio-control i {
-            width: 20px;
+            width: 16px;
             text-align: center;
+            transition: color 0.3s;
+        }
+
+        .audio-control:hover i {
+            color: #fff;
         }
 
         input[type=range] {
             -webkit-appearance: none;
-            width: 70px;
+            width: 60px;
             background: transparent;
             outline: none;
+            cursor: pointer;
         }
 
         input[type=range]::-webkit-slider-thumb {
             -webkit-appearance: none;
-            height: 10px;
-            width: 10px;
+            height: 8px;
+            width: 8px;
             border-radius: 50%;
             background: #fff;
             cursor: pointer;
             margin-top: -3px;
-            box-shadow: 0 0 10px rgba(255,255,255,0.5);
+            box-shadow: 0 0 8px rgba(255,255,255,0.6);
+            transition: transform 0.2s;
+        }
+
+        input[type=range]:active::-webkit-slider-thumb {
+            transform: scale(1.3);
         }
 
         input[type=range]::-webkit-slider-runnable-track {
             width: 100%;
-            height: 4px;
+            height: 2px;
             cursor: pointer;
-            background: rgba(255,255,255,0.2);
-            border-radius: 2px;
+            background: rgba(255,255,255,0.15);
+            border-radius: 1px;
         }
 
         .view-counter {
@@ -332,25 +347,28 @@
             display: flex;
             align-items: center;
             gap: 8px;
-            font-size: 14px;
+            font-size: 13px;
             font-weight: 700;
-            color: rgba(255, 255, 255, 0.5);
+            color: rgba(255, 255, 255, 0.4);
             z-index: 10;
             text-shadow: 0 2px 4px rgba(0,0,0,0.8);
+            letter-spacing: 1px;
         }
 
         .view-counter i {
-            font-size: 16px;
+            font-size: 15px;
         }
 
         @media (max-width: 600px) {
-            .name { font-size: 28px; }
-            .tagline { font-size: 13px; }
+            .name { font-size: 26px; }
+            .tagline { font-size: 12px; }
             .profile-pic { width: 90px; height: 90px; }
-            .social-link { font-size: 24px; }
-            .intro-text { font-size: 16px; letter-spacing: 6px; }
-            .top-ui { top: 15px; left: 15px; padding: 8px 12px; }
+            .social-link { font-size: 22px; }
+            .social-link img { width: 22px; height: 22px; }
+            .intro-text { font-size: 16px; letter-spacing: 8px; }
+            .top-ui { top: 15px; left: 15px; }
             .view-counter { bottom: 15px; left: 15px; }
+            .discord-badge { padding: 6px 14px; font-size: 12px; }
         }
     </style>
 </head>
@@ -463,7 +481,7 @@
         function updateAudioIcon() {
             if (audio.volume === 0) {
                 audioIcon.className = 'fas fa-volume-mute';
-            } else if (audio.volume < 0.5) {
+            } else if (audio.volume < 0.4) {
                 audioIcon.className = 'fas fa-volume-down';
             } else {
                 audioIcon.className = 'fas fa-volume-up';
@@ -510,12 +528,12 @@
                         updateAudioIcon();
                     }).catch(() => {});
                 }
-            }, 600);
+            }, 500);
         });
 
         const ctx = canvas.getContext('2d');
         let particlesArray = [];
-        const particleCount = 60;
+        const particleCount = 75;
 
         function setCanvasSize() {
             canvas.width = window.innerWidth;
@@ -524,22 +542,28 @@
         setCanvasSize();
         window.addEventListener('resize', setCanvasSize);
 
-        class Particle {
+        class Ember {
             constructor() {
-                this.x = Math.random() * canvas.width;
+                this.reset();
                 this.y = Math.random() * canvas.height;
-                this.size = Math.random() * 2 + 0.5;
-                this.speedX = Math.random() * 1 - 0.5;
-                this.speedY = Math.random() * -1 - 0.2;
-                this.opacity = Math.random() * 0.5 + 0.1;
-                this.color = Math.random() > 0.85 ? '255, 40, 40' : '255, 255, 255';
+            }
+            reset() {
+                this.x = Math.random() * canvas.width;
+                this.y = canvas.height + 10;
+                this.size = Math.random() * 2.5 + 0.5;
+                this.speedY = Math.random() * -1.5 - 0.5;
+                this.speedX = Math.random() * 0.8 - 0.4;
+                this.opacity = Math.random() * 0.6 + 0.1;
+                this.flicker = Math.random() * 0.05 + 0.02;
+                this.color = Math.random() > 0.7 ? '255, 50, 0' : '255, 255, 255';
             }
             update() {
-                this.x += this.speedX;
                 this.y += this.speedY;
-                if (this.y < 0) {
-                    this.y = canvas.height;
-                    this.x = Math.random() * canvas.width;
+                this.x += this.speedX;
+                this.opacity -= this.flicker;
+                
+                if (this.y < -10 || this.opacity <= 0) {
+                    this.reset();
                 }
             }
             draw() {
@@ -547,15 +571,15 @@
                 ctx.beginPath();
                 ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
                 ctx.fill();
-                ctx.shadowBlur = 10;
-                ctx.shadowColor = `rgba(${this.color}, ${this.opacity * 2})`;
+                ctx.shadowBlur = 12;
+                ctx.shadowColor = `rgba(${this.color}, ${this.opacity * 1.5})`;
             }
         }
 
         function initParticles() {
             particlesArray = [];
             for (let i = 0; i < particleCount; i++) {
-                particlesArray.push(new Particle());
+                particlesArray.push(new Ember());
             }
         }
         initParticles();
