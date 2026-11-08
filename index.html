@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body, html {
+            height: 100%;
+            overflow: hidden;
+            color: white;
+        }
+
+        #bg-image {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-size: cover;
+            background-position: center;
+            filter: grayscale(100%) brightness(0.5);
+            z-index: -2;
+        }
+
+        #particle-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            width: 100%;
+            padding: 20px;
+            text-align: center;
+            z-index: 1;
+        }
+
+        .profile-pic {
+            width: 110px;
+            height: 110px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+            margin-bottom: 15px;
+            transition: transform 0.3s ease;
+        }
+
+        .profile-pic:hover {
+            transform: scale(1.05);
+        }
+
+        .name {
+            font-size: 32px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.8);
+            margin-bottom: 5px;
+        }
+
+        .tagline {
+            font-size: 14px;
+            color: #cccccc;
+            margin-bottom: 20px;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
+        }
+
+        .discord-badge {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            margin-bottom: 25px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .discord-badge:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .discord-badge i {
+            margin-right: 8px;
+            color: #5865F2;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 15px;
+        }
+
+        .social-link {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            text-decoration: none;
+            font-size: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .social-link:hover {
+            background: rgba(255, 255, 255, 0.9);
+            color: black;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+        }
+
+        .audio-btn {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 10;
+            transition: background 0.3s;
+        }
+
+        .audio-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        @media (max-width: 600px) {
+            .name { font-size: 26px; }
+            .tagline { font-size: 12px; }
+            .profile-pic { width: 90px; height: 90px; }
+            .social-link { width: 40px; height: 40px; font-size: 18px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="audio-btn" id="audio-toggle" title="Toggle Audio">
+        <i class="fas fa-volume-mute" id="audio-icon"></i>
+    </div>
+
+    <div id="bg-image"></div>
+    <canvas id="particle-canvas"></canvas>
+
+    <div class="container">
+        <img src="" alt="Profile" class="profile-pic" id="profile-pic">
+        <h1 class="name" id="name"></h1>
+        <p class="tagline" id="tagline"></p>
+        
+        <div class="discord-badge" id="discord-badge">
+            <i class="fab fa-discord"></i>
+            <span id="discord-name"></span>
+        </div>
+
+        <div class="social-links" id="social-links"></div>
+    </div>
+
+    <audio id="bg-audio" loop></audio>
+
+    <script>
+        const CONFIG = {
+            name: "xronla",
+            tagline: "Steel kissed by shadows",
+            discord: "vxmpscarlet",
+            profilePic: "https://i.pinimg.com/736x/8f/c2/8a/8fc28ab2c4c77b7e5e474a7c8b7f3b1e.jpg",
+            backgroundImage: "https://images.unsplash.com/photo-1478760329108-5c3ed9d495a0?q=80&w=1920&auto=format&fit=crop",
+            audioFile: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
+            links: [
+                { icon: "fa-instagram", url: "https://instagram.com" },
+                { icon: "fa-spotify", url: "https://spotify.com" },
+                { icon: "fa-discord", url: "https://discord.com" },
+                { icon: "fa-twitter", url: "https://twitter.com" }
+            ]
+        };
+
+        document.title = CONFIG.name;
+        document.getElementById('bg-image').style.backgroundImage = `url('${CONFIG.backgroundImage}')`;
+        document.getElementById('profile-pic').src = CONFIG.profilePic;
+        document.getElementById('name').innerText = CONFIG.name;
+        document.getElementById('tagline').innerText = CONFIG.tagline;
+        document.getElementById('discord-name').innerText = CONFIG.discord;
+
+        document.getElementById('discord-badge').addEventListener('click', () => {
+            navigator.clipboard.writeText(CONFIG.discord);
+            alert('Discord tag copied!');
+        });
+
+        const socialContainer = document.getElementById('social-links');
+        CONFIG.links.forEach(link => {
+            const a = document.createElement('a');
+            a.href = link.url;
+            a.target = "_blank";
+            a.className = "social-link";
+            a.innerHTML = `<i class="fab ${link.icon}"></i>`;
+            socialContainer.appendChild(a);
+        });
+
+        const audio = document.getElementById('bg-audio');
+        audio.src = CONFIG.audioFile;
+        const audioBtn = document.getElementById('audio-toggle');
+        const audioIcon = document.getElementById('audio-icon');
+        let isPlaying = false;
+
+        audioBtn.addEventListener('click', () => {
+            if (isPlaying) {
+                audio.pause();
+                audioIcon.className = 'fas fa-volume-mute';
+            } else {
+                audio.play();
+                audioIcon.className = 'fas fa-volume-up';
+            }
+            isPlaying = !isPlaying;
+        });
+
+        const canvas = document.getElementById('particle-canvas');
+        const ctx = canvas.getContext('2d');
+        let particlesArray = [];
+        const particleCount = 60;
+
+        function setCanvasSize() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        setCanvasSize();
+        window.addEventListener('resize', setCanvasSize);
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 2 + 1;
+                this.speedX = Math.random() * 1 - 0.5;
+                this.speedY = Math.random() * 1 + 0.5;
+                this.opacity = Math.random() * 0.5 + 0.1;
+            }
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+                if (this.y > canvas.height) {
+                    this.y = 0;
+                    this.x = Math.random() * canvas.width;
+                }
+            }
+            draw() {
+                ctx.fillStyle = `rgba(255, 255, 255, ${this.opacity})`;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        function initParticles() {
+            particlesArray = [];
+            for (let i = 0; i < particleCount; i++) {
+                particlesArray.push(new Particle());
+            }
+        }
+        initParticles();
+
+        function animateParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            for (let i = 0; i < particlesArray.length; i++) {
+                particlesArray[i].update();
+                particlesArray[i].draw();
+            }
+            requestAnimationFrame(animateParticles);
+        }
+        animateParticles();
+    </script>
+</body>
+</html>
