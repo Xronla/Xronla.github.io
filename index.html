@@ -2,43 +2,125 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Profile</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
         }
 
         body, html {
-            height: 100%;
+            height: 100dvh;
+            width: 100dvw;
             overflow: hidden;
+            background-color: #050505;
             color: white;
+            font-family: 'Rajdhani', sans-serif;
         }
 
         #bg-image {
             position: fixed;
             top: 0;
             left: 0;
-            width: 100vw;
-            height: 100vh;
+            width: 100dvw;
+            height: 100dvh;
             background-size: cover;
             background-position: center;
-            filter: grayscale(100%) brightness(0.5);
+            filter: grayscale(100%) brightness(0.4) contrast(1.2);
+            z-index: -3;
+            opacity: 0;
+            transition: opacity 2s ease;
+        }
+
+        #bg-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100dvw;
+            height: 100dvh;
+            background: radial-gradient(circle at center, transparent 0%, rgba(0,0,0,0.8) 100%);
             z-index: -2;
+            opacity: 0;
+            transition: opacity 2s ease;
         }
 
         #particle-canvas {
             position: fixed;
             top: 0;
             left: 0;
-            width: 100vw;
-            height: 100vh;
+            width: 100dvw;
+            height: 100dvh;
             z-index: -1;
             pointer-events: none;
+            opacity: 0;
+            transition: opacity 2s ease;
+        }
+
+        #intro-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100dvw;
+            height: 100dvh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+            background: #000;
+            cursor: pointer;
+            overflow: hidden;
+        }
+
+        .intro-text {
+            font-family: 'Cinzel', serif;
+            font-size: 24px;
+            letter-spacing: 10px;
+            color: rgba(255, 255, 255, 0.7);
+            text-transform: uppercase;
+            animation: pulse 2s infinite alternate;
+            z-index: 101;
+            pointer-events: none;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 0.3; letter-spacing: 8px; text-shadow: 0 0 5px rgba(255,255,255,0); }
+            100% { opacity: 1; letter-spacing: 12px; text-shadow: 0 0 20px rgba(255,255,255,0.8), 0 0 10px rgba(255,0,0,0.5); }
+        }
+
+        .shard {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(10, 10, 10, 0.95);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: transform 1.2s cubic-bezier(0.25, 1, 0.5, 1), opacity 1.2s ease;
+            pointer-events: none;
+        }
+
+        .shatter .shard {
+            opacity: 0;
+        }
+
+        .shatter .shard:nth-child(1) { transform: translate(-50dvw, -50dvh) rotate(-20deg) scale(0.5); }
+        .shatter .shard:nth-child(2) { transform: translate(50dvw, -30dvh) rotate(15deg) scale(0.5); }
+        .shatter .shard:nth-child(3) { transform: translate(-30dvw, 50dvh) rotate(-10deg) scale(0.5); }
+        .shatter .shard:nth-child(4) { transform: translate(40dvw, 50dvh) rotate(25deg) scale(0.5); }
+        .shatter .shard:nth-child(5) { transform: translate(0dvw, -60dvh) rotate(5deg) scale(0.5); }
+        .shatter .shard:nth-child(6) { transform: translate(0dvw, 60dvh) rotate(-15deg) scale(0.5); }
+        
+        .shatter .intro-text {
+            opacity: 0;
+            transition: opacity 0.5s;
         }
 
         .container {
@@ -46,11 +128,35 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            height: 100vh;
-            width: 100%;
+            height: 100dvh;
+            width: 100dvw;
             padding: 20px;
             text-align: center;
             z-index: 1;
+            opacity: 0;
+            transform: scale(0.9);
+            transition: opacity 2s ease, transform 2s cubic-bezier(0.19, 1, 0.22, 1);
+            pointer-events: none;
+        }
+
+        .reveal .container {
+            opacity: 1;
+            transform: scale(1);
+            pointer-events: auto;
+        }
+
+        .profile-pic-container {
+            position: relative;
+            margin-bottom: 20px;
+            padding: 4px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(139,0,0,0.5));
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.8), 0 0 15px rgba(255, 0, 0, 0.1);
+            transition: box-shadow 0.4s ease;
+        }
+
+        .profile-pic-container:hover {
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.8), 0 0 25px rgba(255, 0, 0, 0.4);
         }
 
         .profile-pic {
@@ -58,127 +164,184 @@
             height: 110px;
             border-radius: 50%;
             object-fit: cover;
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
-            margin-bottom: 15px;
-            transition: transform 0.3s ease;
-        }
-
-        .profile-pic:hover {
-            transform: scale(1.05);
+            display: block;
+            border: 2px solid rgba(255, 255, 255, 0.8);
         }
 
         .name {
-            font-size: 32px;
-            font-weight: 600;
-            letter-spacing: 1px;
-            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.8);
+            font-family: 'Cinzel', serif;
+            font-size: 36px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 1), 0 0 20px rgba(255, 255, 255, 0.2);
             margin-bottom: 5px;
+            color: #f0f0f0;
         }
 
         .tagline {
-            font-size: 14px;
-            color: #cccccc;
-            margin-bottom: 20px;
-            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
+            font-size: 15px;
+            font-weight: 500;
+            color: #aaaaaa;
+            margin-bottom: 25px;
+            letter-spacing: 1px;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 1);
         }
 
         .discord-badge {
             display: flex;
             align-items: center;
             justify-content: center;
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-size: 13px;
-            margin-bottom: 25px;
+            background: rgba(15, 15, 15, 0.6);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-size: 14px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            margin-bottom: 30px;
             cursor: pointer;
-            transition: background 0.3s;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .discord-badge::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .discord-badge:hover::before {
+            left: 100%;
         }
 
         .discord-badge:hover {
-            background: rgba(255, 255, 255, 0.2);
+            background: rgba(30, 30, 30, 0.8);
+            border-color: rgba(255, 255, 255, 0.3);
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
         }
 
         .discord-badge i {
-            margin-right: 8px;
+            margin-right: 10px;
             color: #5865F2;
+            font-size: 18px;
         }
 
         .social-links {
             display: flex;
             gap: 15px;
+            flex-wrap: wrap;
+            justify-content: center;
         }
 
         .social-link {
             display: flex;
             align-items: center;
             justify-content: center;
-            width: 45px;
-            height: 45px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            width: 50px;
+            height: 50px;
+            background: rgba(15, 15, 15, 0.6);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
             color: white;
             text-decoration: none;
-            font-size: 20px;
-            transition: all 0.3s ease;
+            font-size: 22px;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+            clip-path: polygon(10% 0, 100% 0, 100% 90%, 90% 100%, 0 100%, 0 10%);
+        }
+
+        .social-link img {
+            width: 60%;
+            height: 60%;
+            object-fit: contain;
+            filter: drop-shadow(0 0 5px rgba(255,255,255,0.5));
+            transition: transform 0.3s ease;
         }
 
         .social-link:hover {
-            background: rgba(255, 255, 255, 0.9);
+            background: rgba(255, 255, 255, 0.95);
             color: black;
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.6), 0 0 15px rgba(255, 255, 255, 0.4);
+            border-color: transparent;
+        }
+        
+        .social-link:hover img {
+            filter: drop-shadow(0 0 2px rgba(0,0,0,0.8)) invert(1);
+        }
+
+        .social-link:hover i {
+            color: black;
         }
 
         .audio-btn {
             position: absolute;
-            top: 20px;
-            left: 20px;
-            background: rgba(255, 255, 255, 0.1);
+            top: 25px;
+            left: 25px;
+            background: rgba(15, 15, 15, 0.6);
             backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.15);
             color: white;
-            width: 40px;
-            height: 40px;
-            border-radius: 10px;
+            width: 45px;
+            height: 45px;
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
             z-index: 10;
-            transition: background 0.3s;
+            transition: all 0.3s ease;
+            clip-path: polygon(0 0, 100% 0, 100% 70%, 70% 100%, 0 100%);
         }
 
         .audio-btn:hover {
-            background: rgba(255, 255, 255, 0.3);
+            background: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
         }
 
         @media (max-width: 600px) {
-            .name { font-size: 26px; }
-            .tagline { font-size: 12px; }
+            .name { font-size: 28px; }
+            .tagline { font-size: 13px; }
             .profile-pic { width: 90px; height: 90px; }
-            .social-link { width: 40px; height: 40px; font-size: 18px; }
+            .social-link { width: 45px; height: 45px; font-size: 18px; }
+            .intro-text { font-size: 18px; letter-spacing: 6px; }
         }
     </style>
 </head>
 <body>
+
+    <div id="intro-screen">
+        <div class="intro-text">Click to Break</div>
+        <div class="shard" style="clip-path: polygon(0 0, 50% 0, 60% 40%, 30% 100%, 0 100%);"></div>
+        <div class="shard" style="clip-path: polygon(50% 0, 100% 0, 100% 50%, 60% 40%);"></div>
+        <div class="shard" style="clip-path: polygon(100% 50%, 100% 100%, 40% 100%, 60% 40%);"></div>
+        <div class="shard" style="clip-path: polygon(0 100%, 40% 100%, 30% 80%, 15% 50%);"></div>
+        <div class="shard" style="clip-path: polygon(15% 50%, 30% 80%, 40% 100%, 60% 40%, 30% 0);"></div>
+        <div class="shard" style="clip-path: polygon(60% 40%, 100% 100%, 60% 100%, 40% 100%);"></div>
+    </div>
 
     <div class="audio-btn" id="audio-toggle" title="Toggle Audio">
         <i class="fas fa-volume-mute" id="audio-icon"></i>
     </div>
 
     <div id="bg-image"></div>
+    <div id="bg-overlay"></div>
     <canvas id="particle-canvas"></canvas>
 
-    <div class="container">
-        <img src="" alt="Profile" class="profile-pic" id="profile-pic">
+    <div class="container" id="main-container">
+        <div class="profile-pic-container">
+            <img src="" alt="Profile" class="profile-pic" id="profile-pic" loading="eager">
+        </div>
         <h1 class="name" id="name"></h1>
         <p class="tagline" id="tagline"></p>
         
@@ -203,13 +366,19 @@
             links: [
                 { icon: "fa-instagram", url: "https://instagram.com" },
                 { icon: "fa-spotify", url: "https://spotify.com" },
-                { icon: "fa-discord", url: "https://discord.com" },
-                { icon: "fa-twitter", url: "https://twitter.com" }
+                { img: "https://cdn-icons-png.flaticon.com/512/2504/2504914.png", url: "https://custom-link.com" },
+                { icon: "fa-steam", url: "https://steamcommunity.com" }
             ]
         };
 
         document.title = CONFIG.name;
-        document.getElementById('bg-image').style.backgroundImage = `url('${CONFIG.backgroundImage}')`;
+        const bgImg = document.getElementById('bg-image');
+        const bgOverlay = document.getElementById('bg-overlay');
+        const mainContainer = document.getElementById('main-container');
+        const canvas = document.getElementById('particle-canvas');
+        const introScreen = document.getElementById('intro-screen');
+
+        bgImg.style.backgroundImage = `url('${CONFIG.backgroundImage}')`;
         document.getElementById('profile-pic').src = CONFIG.profilePic;
         document.getElementById('name').innerText = CONFIG.name;
         document.getElementById('tagline').innerText = CONFIG.tagline;
@@ -217,7 +386,12 @@
 
         document.getElementById('discord-badge').addEventListener('click', () => {
             navigator.clipboard.writeText(CONFIG.discord);
-            alert('Discord tag copied!');
+            const badge = document.getElementById('discord-badge');
+            const originalText = document.getElementById('discord-name').innerText;
+            document.getElementById('discord-name').innerText = "Copied!";
+            setTimeout(() => {
+                document.getElementById('discord-name').innerText = originalText;
+            }, 1500);
         });
 
         const socialContainer = document.getElementById('social-links');
@@ -226,7 +400,11 @@
             a.href = link.url;
             a.target = "_blank";
             a.className = "social-link";
-            a.innerHTML = `<i class="fab ${link.icon}"></i>`;
+            if (link.img) {
+                a.innerHTML = `<img src="${link.img}" alt="icon">`;
+            } else {
+                a.innerHTML = `<i class="fab ${link.icon}"></i>`;
+            }
             socialContainer.appendChild(a);
         });
 
@@ -236,7 +414,8 @@
         const audioIcon = document.getElementById('audio-icon');
         let isPlaying = false;
 
-        audioBtn.addEventListener('click', () => {
+        audioBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
             if (isPlaying) {
                 audio.pause();
                 audioIcon.className = 'fas fa-volume-mute';
@@ -247,10 +426,31 @@
             isPlaying = !isPlaying;
         });
 
-        const canvas = document.getElementById('particle-canvas');
+        introScreen.addEventListener('click', () => {
+            introScreen.classList.add('shatter');
+            
+            setTimeout(() => {
+                bgImg.style.opacity = 1;
+                bgOverlay.style.opacity = 1;
+                canvas.style.opacity = 1;
+                document.body.classList.add('reveal');
+                
+                if (!isPlaying && CONFIG.audioFile) {
+                    audio.play().then(() => {
+                        audioIcon.className = 'fas fa-volume-up';
+                        isPlaying = true;
+                    }).catch(() => {});
+                }
+            }, 400);
+
+            setTimeout(() => {
+                introScreen.style.display = 'none';
+            }, 1600);
+        });
+
         const ctx = canvas.getContext('2d');
         let particlesArray = [];
-        const particleCount = 60;
+        const particleCount = 80;
 
         function setCanvasSize() {
             canvas.width = window.innerWidth;
@@ -263,24 +463,30 @@
             constructor() {
                 this.x = Math.random() * canvas.width;
                 this.y = Math.random() * canvas.height;
-                this.size = Math.random() * 2 + 1;
-                this.speedX = Math.random() * 1 - 0.5;
-                this.speedY = Math.random() * 1 + 0.5;
-                this.opacity = Math.random() * 0.5 + 0.1;
+                this.size = Math.random() * 2.5 + 0.5;
+                this.speedX = Math.random() * 1.5 - 0.75;
+                this.speedY = Math.random() * -1.5 - 0.5;
+                this.opacity = Math.random() * 0.6 + 0.1;
+                this.color = Math.random() > 0.8 ? '255, 50, 50' : '255, 255, 255';
             }
             update() {
                 this.x += this.speedX;
                 this.y += this.speedY;
-                if (this.y > canvas.height) {
-                    this.y = 0;
+                if (this.y < 0) {
+                    this.y = canvas.height;
                     this.x = Math.random() * canvas.width;
+                }
+                if (this.x > canvas.width || this.x < 0) {
+                    this.speedX *= -1;
                 }
             }
             draw() {
-                ctx.fillStyle = `rgba(255, 255, 255, ${this.opacity})`;
+                ctx.fillStyle = `rgba(${this.color}, ${this.opacity})`;
                 ctx.beginPath();
                 ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
                 ctx.fill();
+                ctx.shadowBlur = 10;
+                ctx.shadowColor = `rgba(${this.color}, ${this.opacity * 2})`;
             }
         }
 
@@ -294,6 +500,7 @@
 
         function animateParticles() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.shadowBlur = 0;
             for (let i = 0; i < particlesArray.length; i++) {
                 particlesArray[i].update();
                 particlesArray[i].draw();
