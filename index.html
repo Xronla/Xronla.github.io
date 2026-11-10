@@ -3,87 +3,26 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Kai</title>
+<title>xronla</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-:root{--red:#c8231b;--gold:#e9b949;--ink:#1a1210;--paper:#f4e9d0;color-scheme:dark;box-sizing:border-box}
+:root{--red:#c8231b;--gold:#e9b949;--ink:#1a1210;--paper:#f4e9d0;color-scheme:dark;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
 *{margin:0;padding:0;box-sizing:inherit;user-select:none;-webkit-tap-highlight-color:transparent}
 html,body{height:100%;width:100%;overflow:hidden;background:#000;color:var(--ink);font-family:'Rajdhani',system-ui,sans-serif}
 button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 :focus-visible{outline:2px solid var(--gold);outline-offset:4px}
 .layer{position:fixed;inset:0;pointer-events:none}
-#stage{position:fixed;inset:0;z-index:0;background:radial-gradient(circle at 50% 70%,#3a120c,#000 70%);opacity:0;transition:opacity .7s ease;transform-origin:46% 55%;will-change:transform}
+
+/* ── Gateway: frozen video + blaze ── */
+#stage{position:fixed;inset:0;z-index:0;background:#000;opacity:0;transition:opacity .7s ease;transform-origin:46% 55%;will-change:transform}
 #vid{width:100%;height:100%;object-fit:cover;object-position:46% 50%;display:block}
 body.ready #stage{opacity:1}
 #glow{z-index:1;opacity:.3;background:radial-gradient(ellipse 90% 45% at 50% 108%,rgba(255,90,20,.75),rgba(200,30,10,.35) 45%,transparent 75%)}
-#page{position:fixed;inset:0;z-index:2;background:#fff;clip-path:circle(0px at 50% 50%);overflow:hidden}
+
+/* ── Profile page (revealed through an iris) ── */
+#page{position:fixed;inset:0;z-index:2;background:#fff;clip-path:circle(0px at 50% 50%)}
 #bgw{position:absolute;inset:0;will-change:transform;transform:scale(1.14)}
-#bg,#bgb{position:absolute;inset:0;background:radial-gradient(circle at 50% 18%,#f4e9d0 0%,#fff 44%,#f7efe0 100%) center bottom/cover no-repeat}
-#bgb{filter:blur(8px);will-change:opacity;opacity:.7}
-#ui{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;text-align:center;padding:calc(8dvh + 28px + env(safe-area-inset-top,0px)) 24px calc(24px + env(safe-area-inset-bottom,0px));pointer-events:none}
-.eyebrow{font-size:clamp(12px,3.4vw,15px);letter-spacing:.28em;text-transform:uppercase;color:var(--red);font-weight:700;margin-bottom:10px}
-h1{font-size:clamp(52px,16vw,120px);line-height:.84;letter-spacing:.02em;text-transform:uppercase;font-weight:700;color:var(--ink);text-shadow:0 2px 0 rgba(233,185,73,.55)}
-.username{margin-top:14px;font-size:clamp(15px,4vw,20px);letter-spacing:.16em;color:#5a3a30;font-weight:600}
-.bio{max-width:34ch;margin-top:22px;font-size:clamp(15px,4vw,19px);line-height:1.45;color:#3a241e}
-.rule{width:min(160px,42vw);height:2px;margin:26px auto;background:linear-gradient(90deg,transparent,var(--red),var(--gold),transparent)}
-.actions{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-top:8px;pointer-events:auto}
-.actions button{padding:12px 22px;border:1px solid rgba(26,18,16,.2);border-radius:999px;background:rgba(255,255,255,.55);color:var(--ink);font-weight:700;letter-spacing:.08em;text-transform:uppercase;backdrop-filter:blur(8px)}
-.actions button:first-child{background:var(--red);border-color:var(--red);color:#fff}
-</style>
-<noscript><style>#stage{opacity:1}#page{clip-path:circle(150% at 50% 50%)}</style></noscript>
-</head>
-<body>
-<div id="stage">
-<video id="vid" muted autoplay loop playsinline preload="auto">
-<source src="video.mp4" type="video/mp4">
-</video>
-</div>
-<div id="glow" class="layer"></div>
-<section id="page" aria-label="Kai profile">
-<div id="bgw">
-<div id="bg"></div>
-<div id="bgb"></div>
-</div>
-<div id="ui">
-<p class="eyebrow">rockstarbabykai</p>
-<h1>Kai</h1>
-<p class="username">@rockstarbabykai</p>
-<div class="rule"></div>
-<p class="bio">Kai. Rockstar baby. Making noise, taking names, and keeping the flame lit.</p>
-<div class="actions">
-<button type="button">Follow</button>
-<button type="button">Listen</button>
-</div>
-</div>
-</section>
-<script>
-(function () {
-var opened = false;
-var page = document.getElementById('page');
-var vid = document.getElementById('vid');
-function openGate() {
-if (opened) return;
-opened = true;
-document.body.classList.add('ready');
-if (page) {
-page.style.transition = 'clip-path 1s ease';
-page.style.clipPath = 'circle(150% at 50% 50%)';
-}
-}
-window.openGateFallback = openGate;
-window.addEventListener('error', openGate);
-window.addEventListener('load', function () {
-setTimeout(openGate, 3000);
-});
-setTimeout(openGate, 6000);
-if (vid) {
-vid.addEventListener('canplay', openGate, { once: true });
-vid.addEventListener('error', openGate);
-vid.play().catch(openGate);
-}
-})();
-</script>
-</body>
-</html>
+#bg,#bgb{position:absolute;inset:0;background:#fff center bottom/cover no-repeat}
+#bgb{filter:blur(8px);will-change:opacity}
+#ui{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;text-align:center;padding:calc(8dvh + 28px) 24px 0;pointer-events:none}
